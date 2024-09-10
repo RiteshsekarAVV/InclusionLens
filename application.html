@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Job Application Form</title>
+    <link rel="stylesheet" href="style.css">
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth.js"></script>
+</head>
+<body>
+
+    <!-- Header Section -->
+    <header>
+        <div class="logo">
+            <img src="download-removebg-preview.png" alt="Company Logo" style="width: 60px;">
+        </div>
+        <nav>
+            <ul>
+                <li><a href="#">Home</a></li>
+                <li><a href="#">About Us</a></li>
+                <li><a href="#">Apply Now</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <!-- Main Section -->
+    <div class="form-container">
+        <h1>Job Application Form</h1>
+        <form id="jobForm">
+            <div class="form-group">
+                <label for="fullName">Full Name:</label>
+                <input type="text" id="fullName" name="fullName" required>
+            </div>
+            <div class="form-group">
+                <label for="email">Email:</label>
+                <input type="email" id="email" name="email" required>
+            </div>
+            <div class="form-group">
+                <label for="phone">Phone:</label>
+                <input type="tel" id="phone" name="phone" required>
+            </div>
+            <div class="form-group">
+                <label for="position">Position Applying For:</label>
+                <input type="text" id="position" name="position" required>
+            </div>
+            <div class="form-group">
+                <label for="resume">Upload Resume (PDF):</label>
+                <input type="file" id="resume" name="resume" accept=".pdf" required>
+            </div>
+            <button type="submit">Submit Application</button>
+        </form>
+
+        <div id="statusMessage"></div>
+    </div>
+
+    <!-- Footer Section -->
+    <footer>
+        <div class="footer-container">
+            <div class="footer-section">
+                <h3>About Us</h3>
+                <p>We are a dedicated company committed to providing the best services in the industry.</p>
+            </div>
+            <div class="footer-section">
+                <h3>Contact Us</h3>
+                <ul>
+                    <li>Email: info@company.com</li>
+                    <li>Phone: +123 456 7890</li>
+                    <li>Address: 123 Business St, City, Country</li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h3>Follow Us</h3>
+                <ul class="social-icons">
+                    <li><a href="#">Facebook</a></li>
+                    <li><a href="#">Twitter</a></li>
+                    <li><a href="#">LinkedIn</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2024 Company Name. All Rights Reserved.</p>
+        </div>
+    </footer>
+
+    <!-- Firebase Configuration and Script -->
+    <script>
+        // Firebase configuration
+        const firebaseConfig = {
+            apiKey: "YOUR_API_KEY",
+            authDomain: "YOUR_AUTH_DOMAIN",
+            projectId: "YOUR_PROJECT_ID",
+            storageBucket: "YOUR_STORAGE_BUCKET",
+            messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
+            appId: "YOUR_APP_ID",
+            databaseURL: "YOUR_DATABASE_URL"
+        };
+
+        // Initialize Firebase
+        const app = firebase.initializeApp(firebaseConfig);
+        const database = firebase.database();
+
+        // Submit form and store data in Firebase Realtime Database
+        document.getElementById("jobForm").addEventListener("submit", function(event) {
+            event.preventDefault();
+
+            const fullName = document.getElementById("fullName").value;
+            const email = document.getElementById("email").value;
+            const phone = document.getElementById("phone").value;
+            const position = document.getElementById("position").value;
+
+            // Store the form data in Firebase
+            const formData = {
+                fullName,
+                email,
+                phone,
+                position,
+                resume: document.getElementById("resume").files[0].name // Placeholder for the uploaded resume
+            };
+
+            // Store form data under the 'applications' node
+            database.ref('applications').push(formData)
+                .then(() => {
+                    document.getElementById("statusMessage").textContent = "Application submitted successfully!";
+                })
+                .catch((error) => {
+                    console.error("Error submitting application:", error);
+                });
+        });
+    </script>
+
+</body>
+</html>

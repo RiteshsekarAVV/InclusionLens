@@ -1,40 +1,21 @@
-document.getElementById('uploadForm').addEventListener('submit', function(event) {
+document.getElementById("jobForm").addEventListener("submit", function(event) {
   event.preventDefault();
 
-  const fileInput = document.getElementById('resumeUpload');
-  const file = fileInput.files[0];
+  // Gather form data
+  let formData = new FormData();
+  formData.append("fullName", document.getElementById("fullName").value);
+  formData.append("email", document.getElementById("email").value);
+  formData.append("phone", document.getElementById("phone").value);
+  formData.append("position", document.getElementById("position").value);
+  formData.append("resume", document.getElementById("resume").files[0]);
 
-  if (!file) {
-    alert('Please upload a resume.');
-    return;
-  }
+  // Display status message
+  const statusMessage = document.getElementById("statusMessage");
+  statusMessage.textContent = "Submitting your application...";
 
-  // Validate file type
-  const validTypes = ['application/pdf', 'application/msword', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'];
-  if (!validTypes.includes(file.type)) {
-    alert('Invalid file type. Please upload a PDF or DOC file.');
-    return;
-  }
-
-  // Show loading spinner
-  document.getElementById('loadingSpinner').style.display = 'block';
-
-  // Simulate processing time (for demo purposes)
-  setTimeout(() => {
-    document.getElementById('loadingSpinner').style.display = 'none';
-
-    // Simulate bias detection report (for demo purposes)
-    const mockReport = `
-      Bias Detected:
-      - Gender Bias: 3%
-      - Ethnicity Bias: 0%
-      - Age Bias: 5%
-      
-      Recommendations:
-      1. Remove gendered language (e.g., 'he', 'she').
-      2. Avoid mentioning age-related achievements.
-    `;
-    document.getElementById('biasReport').textContent = mockReport;
-    document.getElementById('reportSection').style.display = 'block';
+  // Simulate form submission (AJAX request)
+  setTimeout(function() {
+      // Simulate success response
+      statusMessage.textContent = "Application submitted successfully!";
   }, 2000);
 });
