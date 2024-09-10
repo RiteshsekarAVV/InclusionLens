@@ -1,34 +1,40 @@
-document.getElementById('uploadForm').addEventListener('submit', function (e) {
-  e.preventDefault();
+document.getElementById('uploadForm').addEventListener('submit', function(event) {
+  event.preventDefault();
 
   const fileInput = document.getElementById('resumeUpload');
   const file = fileInput.files[0];
 
   if (!file) {
-    alert("Please upload a resume!");
+    alert('Please upload a resume.');
     return;
   }
 
-  // Simulate sending the file to the server and receiving a report
-  simulateUpload(file).then((report) => {
-    document.getElementById('reportSection').style.display = 'block';
-    document.getElementById('biasReport').innerText = JSON.stringify(report, null, 2);
-  });
-});
+  // Validate file type
+  const validTypes = ['application/pdf', 'application/msword', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'];
+  if (!validTypes.includes(file.type)) {
+    alert('Invalid file type. Please upload a PDF or DOC file.');
+    return;
+  }
 
-// Mock function to simulate uploading and receiving a bias report
-function simulateUpload(file) {
-  return new Promise((resolve) => {
-    setTimeout(() => {
-      const biasReport = {
-        fileName: file.name,
-        bias_found: true,
-        indicators: [
-          { term: "young", category: "age indicators", context: "We are looking for a young and dynamic individual" },
-          { term: "man", category: "gendered terms", context: "A strong man for the position" }
-        ]
-      };
-      resolve(biasReport);
-    }, 2000);  // Simulate 2-second delay
-  });
-}
+  // Show loading spinner
+  document.getElementById('loadingSpinner').style.display = 'block';
+
+  // Simulate processing time (for demo purposes)
+  setTimeout(() => {
+    document.getElementById('loadingSpinner').style.display = 'none';
+
+    // Simulate bias detection report (for demo purposes)
+    const mockReport = `
+      Bias Detected:
+      - Gender Bias: 3%
+      - Ethnicity Bias: 0%
+      - Age Bias: 5%
+      
+      Recommendations:
+      1. Remove gendered language (e.g., 'he', 'she').
+      2. Avoid mentioning age-related achievements.
+    `;
+    document.getElementById('biasReport').textContent = mockReport;
+    document.getElementById('reportSection').style.display = 'block';
+  }, 2000);
+});
